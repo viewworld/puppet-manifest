@@ -1,0 +1,175 @@
+#
+# Base LDAP scheme with a couple of groups and users for use with the
+# eXist database.
+#
+# Can be inserted into an empty ldap database with:
+# ldapadd -x -D 'cn=admin,dc=viewworld,dc=dk' -W -f viewworld.ldif
+#
+# The password requested is the password set for the rootpw entry in
+# the slapd.conf config file usually located in /etc/open/ldap
+#
+
+#
+# The top level domain definition
+#
+# dn: dc=viewworld,dc=dk
+# objectClass: top
+# objectClass: dcObject
+# objectClass: organization
+# o: viewworld
+# dc: viewworld
+
+#
+# The LDAP server administrator
+#
+# dn: cn=admin,dc=viewworld,dc=dk
+# objectClass: simpleSecurityObject
+# objectClass: organizationalRole
+# cn: admin
+# description: LDAP administrator
+# userPassword: {MD5}q91QbwnSwmmZNzR1bhz8mQ==
+
+#
+# The eXist organisation needed for integration with eXist
+#
+dn: o=exist,dc=viewworld,dc=dk
+o: exist
+objectClass: organization
+objectClass: top
+
+#
+# The groups top object where the groups belong
+#
+dn: ou=Groups,o=exist,dc=viewworld,dc=dk
+objectClass: organizationalUnit
+objectClass: top
+ou: Groups
+
+#
+# The users top object where all users belong
+#
+dn: ou=Users,o=exist,dc=viewworld,dc=dk
+objectClass: organizationalUnit
+objectClass: top
+ou: Users
+
+#
+# The dba group that gets full administrative access to the database
+#
+dn: cn=dba,ou=Groups,o=exist,dc=viewworld,dc=dk
+objectClass: posixGroup
+objectClass: top
+cn: dba
+gidNumber: 5000
+
+#
+# The guest group for users that are not logged in
+#
+dn: cn=guest,ou=Groups,o=exist,dc=viewworld,dc=dk
+objectClass: posixGroup
+objectClass: top
+cn: guest
+gidNumber: 5001
+
+#
+# The ViewWorld group
+#
+dn: cn=viewworld,ou=Groups,o=exist,dc=viewworld,dc=dk
+objectClass: posixGroup
+objectClass: top
+cn: viewworld
+gidNumber: 5002
+
+#
+# The Demo group
+#
+dn: cn=demo,ou=Groups,o=exist,dc=viewworld,dc=dk
+objectClass: posixGroup
+objectClass: top
+cn: demo
+gidNumber: 5003
+
+#
+# The admin user for administrating the database
+#
+dn: uid=admin,ou=Users,o=exist,dc=viewworld,dc=dk
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+givenName: exist
+sn: admin
+cn: exist admin
+uid: admin
+userPassword: {MD5}q91QbwnSwmmZNzR1bhz8mQ==
+uidNumber: 10000
+gidNumber: 5000
+homeDirectory: /home/users/admin
+
+#
+# The guest user for un-authenticated users
+#
+dn: uid=guest,ou=Users,o=exist,dc=viewworld,dc=dk
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+sn: guest
+cn: guest
+uid: guest
+uidNumber: 10001
+gidNumber: 5001
+homeDirectory: /home/users/guest
+
+#
+# Normal users follow...
+#
+# dn: uid=jde,ou=Users,o=exist,dc=viewworld,dc=dk
+# objectClass: inetOrgPerson
+# objectClass: posixAccount
+# objectClass: top
+# givenName: Jon
+# sn: Elverkilde
+# cn: Jon Elverkilde
+# uid: jde
+# uidNumber: 10002
+# homeDirectory: /home/users/jde
+# gidNumber: 5002
+# userPassword: {MD5}GkjGkPSQtlAg9h4fnasG/Q==
+
+dn: uid=mb,ou=Users,o=exist,dc=viewworld,dc=dk
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+givenName: Michael
+sn: Budde
+cn: Michael Budde
+uid: mb
+userPassword: {MD5}qd3PUUGYgb3uRFGB4y7eWA==
+uidNumber: 10003
+gidNumber: 5002
+homeDirectory: /home/users/mb
+
+# dn: uid=rbp,ou=Users,o=exist,dc=viewworld,dc=dk
+# objectClass: inetOrgPerson
+# objectClass: posixAccount
+# objectClass: top
+# givenName: Rune Bech
+# sn: Persson
+# cn: Rune Bech Persson
+# uid: rbp
+# userPassword: {MD5}X7TAn/zwolZKLsoAHt3kIQ==
+# uidNumber: 10004
+# gidNumber: 5002
+# homeDirectory: /home/users/rbp
+
+dn: uid=demo,ou=Users,o=exist,dc=viewworld,dc=dk
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+givenName: demo
+sn: demo
+cn: demo
+uid: demo
+userPassword: {MD5}/gHOKn+6yPr67XyYKgTiKQ==
+uidNumber: 10006
+gidNumber: 5003
+homeDirectory: /home/users/demo
