@@ -1,5 +1,4 @@
 
-
 class exist {
 
   $user = 'exist'
@@ -8,6 +7,7 @@ class exist {
   $app_name = 'exist'
 
   $exist_home = '/opt/exist'
+  $exist_jar  = "${exist_home}/exist-installer.jar"
   $data_dir = '/var/lib/exist'
   $log_dir = '/var/log/exist'
   $pid_dir = '/var/run/exist'
@@ -15,69 +15,88 @@ class exist {
   $port = 8080
 
   user { $user:
-    ensure     => present,
-    shell      => '/bin/bash',
+    ensure => present,
+    shell  => '/bin/bash',
   }
 
-  file { $data_dir:
-    ensure => directory,
-    owner => $user,
-    group => $group,
+  file { $exist_home:
+    ensure  => directory,
   }
 
-  file { $log_dir:
-    ensure => directory,
-    owner => $user,
-    group => $group,
+  file { $exist_jar:
+    source  => 'puppet:///modules/exist/exist-installer.jar',
+    require => File[$exist_home],
   }
 
-  file { $pid_dir:
-    ensure => directory,
-    owner => $user,
-    group => $group,
+  package { ['openjdk-6-jre-headless', 'openjdk-6-jdk']:
+    ensure => installed,
   }
 
-  exec { "fix exist webapp owner":
-    command => "chown -R ${user}:${group} ${exist_home}/webapp",
-    unless => "test `stat -c %U:%G ${exist_home}/webapp` = ${user}:${group}",
-    user => 'root',
-    require => User[$user],
+  exec { 'install exist':
+    command => "java -jar ${exist_jar} -p ${exist_home}",
+    creates => "${exist_home}/src",
+    require => [File[$exist_jar], Package['openjdk-6-jre-headless']],
   }
 
-  file { "/etc/init.d/exist":
-    content => template('exist/exist.init.sh.erb'),
-    mode => "0755",
+  file {
+    '/etc/init.d/exist':
+      content => template('exist/exist.init.sh.erb'),
+      mode    => '0755';
+
+    "${exist_home}/conf.xml":
+      content => template('exist/conf.xml.erb'),
+      notify  => Service['exist'];
+
+    "${exist_home}/server.xml":
+      content => template('exist/server.xml.erb'),
+      notify  => Service['exist'];
+
+    "${exist_home}/tools/wrapper/conf/wrapper.conf":
+      content => template('exist/wrapper.conf.erb'),
+      notify  => Service['exist'];
+
+    "${exist_home}/extensions/local.build.properties":
+      content => template('exist/local.build.properties.erb');
+
+    "${exist_home}/tools/jetty/logs":
+      ensure => directory,
+      owner  => $user,
+      group  => $group;
+
+    "${exist_home}/tools/wrapper/logs":
+      ensure => directory,
+      owner  => $user,
+      group  => $group;
+
+    "${exist_home}/webapp/WEB-INF/logs":
+      ensure => link,
+      target => $log_dir,
+      force  => true;
   }
 
-  file { "${exist_home}/conf.xml":
-    content => template('exist/conf.xml.erb'),
-    notify => Service['exist'],
+  Exec['install exist'] -> File["${exist_home}/conf.xml"]
+  Exec['install exist'] -> File["${exist_home}/server.xml"]
+  Exec['install exist'] -> File["${exist_home}/tools/wrapper/conf/wrapper.conf"]
+  Exec['install exist'] -> File["${exist_home}/extensions/local.build.properties"]
+  Exec['install exist'] -> File["${exist_home}/tools/jetty/logs"] -> Service['exist']
+  Exec['install exist'] -> File["${exist_home}/tools/wrapper/logs"] -> Service['exist']
+  Exec['install exist'] -> File["${exist_home}/webapp/WEB-INF/logs"] -> Service['exist']
+
+  exec { 'build exist':
+    command => "${exist_home}/build.sh",
+    creates => "${exist_home}/build/classes",
+    cwd     => $exist_home,
+    require => [
+      Exec['install exist'],
+      File["${exist_home}/extensions/local.build.properties"],
+      Package['openjdk-6-jdk'],
+    ],
   }
 
-  file { "${exist_home}/server.xml":
-    content => template('exist/server.xml.erb'),
-    notify => Service['exist'],
-  }
-
-  file { "${exist_home}/tools/wrapper/conf/wrapper.conf":
-    content => template('exist/wrapper.conf.erb'),
-    notify => Service['exist'],
-  }
-
-  file { "${exist_home}/extensions/local.build.properties":
-    content => template('exist/local.build.properties.erb'),
-  }
-
-  file { "${exist_home}/tools/jetty/logs":
-    ensure => directory,
-    owner => $user,
-    group => $group,
-  }
-
-  file { "${exist_home}/tools/wrapper/logs":
-    ensure => directory,
-    owner => $user,
-    group => $group,
+  file { [$data_dir, $log_dir, $pid_dir]:
+      ensure => directory,
+      owner  => $user,
+      group  => $group,
   }
 
   package { 'libc6-i386':
@@ -85,16 +104,21 @@ class exist {
   }
 
   service { 'exist':
-    ensure => running,
-    enable => true,
+    ensure     => running,
+    enable     => true,
     hasrestart => true,
-    hasstatus => true,
-    require => Package['libc6-i386'],
+    hasstatus  => true,
+    require    => [
+      Package['libc6-i386'],
+      Exec['build exist'],
+      File[$pid_dir],
+      File[$log_dir],
+      File[$data_dir],
+    ],
   }
-  Exec['fix exist webapp owner'] -> Service['exist']
 
   monit::monitor { "exist":
-    ensure => present,
+    ensure  => present,
     pidfile => "${pid_dir}/${app_name}.pid",
     ip_port => $port,
   }
