@@ -1,8 +1,11 @@
 
-class viewworld::appserver {
+class viewworld::appserver ($worker=false) {
 
   $user = 'appmgr'
   $group = 'appmgr'
+
+  $src_root  = "/home/${user}/src"
+  $venv_root = "/home/${user}/venv"
 
   user { $user:
     ensure     => present,
@@ -16,18 +19,33 @@ class viewworld::appserver {
     group => $group,
   }
 
-  class { 'webapp::python':
-    owner     => $user,
-    group     => $group,
-    src_root  => "/home/${user}/src",
-    venv_root => "/home/${user}/venv",
-    require   => User[$user]
-  }
-
   package { 'git':
     ensure => installed,
   }
 
-  include ssl
+  file {
+    $src_root:
+      ensure => directory,
+      owner => $user,
+      group => $group;
+
+    $venv_root:
+      ensure => directory,
+      owner => $user,
+      group => $group;
+  }
+
+  class { 'webapp::python':
+    owner     => $user,
+    group     => $group,
+    src_root  => $src_root,
+    venv_root => $venv_root,
+    worker    => $worker,
+    require   => User[$user],
+  }
+
+  if !$worker {
+    include ssl
+  }
 
 }

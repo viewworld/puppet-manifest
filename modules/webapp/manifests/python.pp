@@ -1,37 +1,48 @@
-class webapp::python($ensure=present,
-                     $owner="www-data",
-                     $group="www-data",
-                     $src_root="/usr/local/src",
-                     $venv_root="/usr/local/venv",
-                     $nginx_workers=1,
-                     $monit_admin="",
-                     $monit_interval=60) {
+class webapp::python(
+  $ensure=present,
+  $owner='www-data',
+  $group='www-data',
+  $src_root='/usr/local/src',
+  $venv_root='/usr/local/venv',
+  $worker=false,
+  $nginx_workers=1,
+  $monit_admin="",
+  $monit_interval=60
+) {
 
-  file { $webapp::python::src_root:
-    ensure => directory,
-    owner => $owner,
-    group => $group,
+  if !$worker {
   }
 
-  class { "nginx":
-    ensure => $ensure,
-    workers => $nginx_workers
-  }
-
-  class { "python::dev":
+  class { 'python::dev':
     ensure => $ensure,
   }
 
-  class { "python::venv":
+  class { 'python::venv':
     ensure => $ensure,
     owner => $owner,
     group => $group
   }
 
-  class { "python::gunicorn":
-    ensure => $ensure,
-    owner => $owner,
-    group => $group
+  if !$worker {
+
+    class { 'nginx':
+      ensure => $ensure,
+      workers => $nginx_workers
+    }
+
+    class { 'python::gunicorn':
+      ensure => $ensure,
+      owner => $owner,
+      group => $group
+    }
+
+  } else {
+
+    class { 'python::celery':
+      owner => $owner,
+      group => $group,
+    }
+
   }
 
   class { monit:

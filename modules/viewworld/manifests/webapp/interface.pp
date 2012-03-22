@@ -1,11 +1,14 @@
 
 class viewworld::webapp::interface (
-  $domain="${hostname}.viewworld.dk"
+  $domain="${hostname}.viewworld.dk",
+  $worker=false
 ) {
 
   $binary_deps = [
     'ant',
     'subversion',
+    'gettext',
+    'jsdoc-toolkit',
     'libxml2-dev',
     'libxslt1-dev',
     'libldap2-dev',
@@ -14,26 +17,33 @@ class viewworld::webapp::interface (
 
   package { $binary_deps:
     ensure => present,
-    before => Webapp::Python::Instance['interface']
   }
 
   $src = "${webapp::python::src_root}/interface"
 
-  webapp::python::instance { 'interface':
-    domain          => $domain,
-    django          => true,
-    django_settings => 'viewworld.settings',
-    mediaroot       => "${src}/viewworld/static",
-    mediaprefix     => '/static',
-    ssl             => true,
-    require         => Class['ssl']
+  file { $src:
+    ensure => directory,
+    owner => $viewworld::appserver::user,
+    group => $viewworld::appserver::group,
   }
 
-  exec { "interface git":
+  exec { 'interface git':
     command => "git init ${src}",
     creates => "${src}/.git/config",
-    user => $webapp::python::owner,
-    group => $webapp::python::group,
+    user    => $viewworld::appserver::user,
+    require => File[$src],
+  }
+
+  if !$worker {
+    webapp::python::instance { 'interface':
+      domain          => $domain,
+      django          => true,
+      django_settings => 'viewworld.settings',
+      mediaroot       => "${src}/viewworld/static",
+      mediaprefix     => '/static',
+      ssl             => true,
+      require         => Class['ssl']
+    }
   }
 
   # file { "${src}/viewworld/settings":

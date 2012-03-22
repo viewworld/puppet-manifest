@@ -10,11 +10,22 @@ Exec {
 }
 
 
-node 'test' {
+node test, /^test\d+$/ {
 
   include ldap
   include exist
   include viewworld::appserver
   include viewworld::webapp::interface
+
+}
+
+node /^worker\d+$/ {
+
+  class { 'viewworld::appserver':
+    worker => true,
+  }
+  class { 'viewworld::webapp::interface':
+    worker => true,
+  }
 
 }

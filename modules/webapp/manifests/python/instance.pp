@@ -22,11 +22,7 @@ define webapp::python::instance($domain,
   $owner = $webapp::python::owner
   $group = $webapp::python::group
 
-  file { $src:
-    ensure => directory,
-    owner => $owner,
-    group => $group,
-  }
+  Webapp::Python::Instance[$name] -> File[$src]
 
   if $ssl {
     include ssl
