@@ -58,20 +58,30 @@ class exist {
     "${exist_home}/extensions/local.build.properties":
       content => template('exist/local.build.properties.erb');
 
-    "${exist_home}/tools/jetty/logs":
-      ensure => directory,
-      owner  => $user,
-      group  => $group;
-
-    "${exist_home}/tools/wrapper/logs":
-      ensure => directory,
-      owner  => $user,
-      group  => $group;
-
     "${exist_home}/webapp/WEB-INF/logs":
       ensure => link,
       target => $log_dir,
       force  => true;
+
+    "${exist_home}/tools/wrapper/logs":
+      ensure => link,
+      target => "$log_dir/wrapper",
+      force  => true;
+
+    "${exist_home}/tools/jetty/logs":
+      ensure => link,
+      target => "$log_dir/jetty",
+      force  => true;
+
+    "${log_dir}/wrapper":
+      ensure => directory,
+      owner  => $user,
+      group  => $group;
+
+    "${log_dir}/jetty":
+      ensure => directory,
+      owner  => $user,
+      group  => $group;
   }
 
   Exec['install exist'] -> File["${exist_home}/conf.xml"]
@@ -114,6 +124,7 @@ class exist {
       File[$pid_dir],
       File[$log_dir],
       File[$data_dir],
+      Service['slapd'],
     ],
   }
 
