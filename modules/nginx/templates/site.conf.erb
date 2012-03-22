@@ -10,7 +10,7 @@ server {
 server {
   listen 80;
   server_name <%= domain %>;
-  rewrite ^ https://$server_name$request_uri? permanent;
+  rewrite ^ https://$host$request_uri? permanent;
 }
 <% end %>
 
