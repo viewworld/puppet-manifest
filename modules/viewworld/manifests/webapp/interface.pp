@@ -13,13 +13,35 @@ class viewworld::webapp::interface (
     'libxslt1-dev',
     'libldap2-dev',
     'libsasl2-dev',
-    'libjpeg62-dev',        # JPEG support in PIL
-    'zlib1g-dev',           # PNG support in PIL
   ]
 
   package { $binary_deps:
     ensure => present,
   }
+
+  if $worker {
+    $extra_binary_deps = [
+      'libjpeg62-dev',        # JPEG support in PIL
+      'zlib1g-dev',           # PNG support in PIL
+    ]
+
+    package { $extra_binary_deps:
+      ensure => present,
+    }
+
+    # Workaround for PIL on 64 bit machines
+    file {
+      '/usr/local/lib/libjpeg.so':
+        ensure => link,
+        target => '/usr/lib/x86_64-linux-gnu/libjpeg.so',
+        require => Package['libjpeg62-dev'];
+      '/usr/local/lib/libz.so':
+        ensure => link,
+        target => '/usr/lib/x86_64-linux-gnu/libz.so',
+        require => Package['zlib1g-dev'];
+    }
+  }
+
 
   $src = "${webapp::python::src_root}/interface"
 
