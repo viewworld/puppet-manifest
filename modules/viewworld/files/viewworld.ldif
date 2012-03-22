@@ -60,7 +60,7 @@ dn: cn=dba,ou=Groups,o=exist,dc=viewworld,dc=dk
 objectClass: posixGroup
 objectClass: top
 cn: dba
-gidNumber: 5000
+gidNumber: 1
 
 #
 # The guest group for users that are not logged in
@@ -69,7 +69,7 @@ dn: cn=guest,ou=Groups,o=exist,dc=viewworld,dc=dk
 objectClass: posixGroup
 objectClass: top
 cn: guest
-gidNumber: 5001
+gidNumber: 1000
 
 #
 # The ViewWorld group
@@ -78,7 +78,7 @@ dn: cn=viewworld,ou=Groups,o=exist,dc=viewworld,dc=dk
 objectClass: posixGroup
 objectClass: top
 cn: viewworld
-gidNumber: 5002
+gidNumber: 1001
 
 #
 # The Demo group
@@ -87,7 +87,7 @@ dn: cn=demo,ou=Groups,o=exist,dc=viewworld,dc=dk
 objectClass: posixGroup
 objectClass: top
 cn: demo
-gidNumber: 5003
+gidNumber: 1004
 
 #
 # The admin user for administrating the database
@@ -101,8 +101,8 @@ sn: admin
 cn: exist admin
 uid: admin
 userPassword: {MD5}q91QbwnSwmmZNzR1bhz8mQ==
-uidNumber: 10000
-gidNumber: 5000
+uidNumber: 1001
+gidNumber: 1
 homeDirectory: /home/users/admin
 
 #
@@ -115,25 +115,25 @@ objectClass: top
 sn: guest
 cn: guest
 uid: guest
-uidNumber: 10001
-gidNumber: 5001
+uidNumber: 1000
+gidNumber: 1000
 homeDirectory: /home/users/guest
 
 #
 # Normal users follow...
 #
-# dn: uid=jde,ou=Users,o=exist,dc=viewworld,dc=dk
-# objectClass: inetOrgPerson
-# objectClass: posixAccount
-# objectClass: top
-# givenName: Jon
-# sn: Elverkilde
-# cn: Jon Elverkilde
-# uid: jde
-# uidNumber: 10002
-# homeDirectory: /home/users/jde
-# gidNumber: 5002
-# userPassword: {MD5}GkjGkPSQtlAg9h4fnasG/Q==
+dn: uid=jde,ou=Users,o=exist,dc=viewworld,dc=dk
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+givenName: Jon
+sn: Elverkilde
+cn: Jon Elverkilde
+uid: jde
+uidNumber: 1002
+homeDirectory: /home/users/jde
+gidNumber: 1001
+userPassword: {MD5}GkjGkPSQtlAg9h4fnasG/Q==
 
 dn: uid=mb,ou=Users,o=exist,dc=viewworld,dc=dk
 objectClass: inetOrgPerson
@@ -144,22 +144,22 @@ sn: Budde
 cn: Michael Budde
 uid: mb
 userPassword: {MD5}qd3PUUGYgb3uRFGB4y7eWA==
-uidNumber: 10003
-gidNumber: 5002
+uidNumber: 1004
+gidNumber: 1001
 homeDirectory: /home/users/mb
 
-# dn: uid=rbp,ou=Users,o=exist,dc=viewworld,dc=dk
-# objectClass: inetOrgPerson
-# objectClass: posixAccount
-# objectClass: top
-# givenName: Rune Bech
-# sn: Persson
-# cn: Rune Bech Persson
-# uid: rbp
-# userPassword: {MD5}X7TAn/zwolZKLsoAHt3kIQ==
-# uidNumber: 10004
-# gidNumber: 5002
-# homeDirectory: /home/users/rbp
+dn: uid=rbp,ou=Users,o=exist,dc=viewworld,dc=dk
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+givenName: Rune Bech
+sn: Persson
+cn: Rune Bech Persson
+uid: rbp
+userPassword: {MD5}X7TAn/zwolZKLsoAHt3kIQ==
+uidNumber: 1005
+gidNumber: 1001
+homeDirectory: /home/users/rbp
 
 dn: uid=demo,ou=Users,o=exist,dc=viewworld,dc=dk
 objectClass: inetOrgPerson
@@ -170,6 +170,6 @@ sn: demo
 cn: demo
 uid: demo
 userPassword: {MD5}/gHOKn+6yPr67XyYKgTiKQ==
-uidNumber: 10006
-gidNumber: 5003
+uidNumber: 1008
+gidNumber: 1004
 homeDirectory: /home/users/demo
