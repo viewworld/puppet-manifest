@@ -13,6 +13,8 @@ class viewworld::webapp::interface (
     'libxslt1-dev',
     'libldap2-dev',
     'libsasl2-dev',
+    'libjpeg62-dev',        # JPEG support in PIL
+    'zlib1g-dev',           # PNG support in PIL
   ]
 
   package { $binary_deps:
