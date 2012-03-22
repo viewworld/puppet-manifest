@@ -17,9 +17,4 @@ node 'test' {
   include viewworld::appserver
   include viewworld::webapp::interface
 
-  file { '/etc/ldap/viewworld.ldif':
-    source => 'puppet:///modules/viewworld/viewworld.ldif',
-    recurse => true,
-  }
-
 }

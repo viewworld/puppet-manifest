@@ -1,5 +1,4 @@
 
-
 class ldap {
 
   package { ['slapd', 'ldap-utils']:
@@ -17,9 +16,14 @@ class ldap {
 
   exec { "fix admin password":
     command => "sed -i '/^olcRootPW/ s@::\?.\+$@: ${hashed_password}@' '${dit_ldif}'",
-    unless => "grep '${dit_ldif}' '${hashed_password}'",
+    unless => "grep '${hashed_password}' '${dit_ldif}'",
     require => Package['slapd'],
     notify => Service['slapd'],
+  }
+
+  file { '/etc/ldap/viewworld.ldif':
+    source => 'puppet:///modules/viewworld/viewworld.ldif',
+    recurse => true,
   }
 
 }
