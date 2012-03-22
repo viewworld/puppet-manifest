@@ -7,6 +7,6 @@
   notifempty
   create 640 <%= owner %> <%= group %>
   postrotate
-    <%= initscript %> restart
+    <%= initscript %> reload-log
   endscript
 }
