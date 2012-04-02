@@ -47,7 +47,7 @@ source-server$ sudo tar -czpf exist.tar.gz *
 # copy viewworld.ldif and exist.tar.gz to dest server
 
 dest-server$ # remove password prompt from viewworld.ldif
-dest-server$ ldapsearch -x -D cn=admin,dc=viewworld,dc=dk -W -c viewworld.ldif
+dest-server$ ldapadd -x -D cn=admin,dc=viewworld,dc=dk -W -c -f viewworld.ldif
 dest-server$ cd /var/lib/exist
 dest-server$ sudo rm -r *
 dest-server$ sudo tar -xzf ~/exist.tar.gz
