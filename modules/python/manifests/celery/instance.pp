@@ -14,7 +14,7 @@ define python::celery::instance(
 
   $rundir = $python::celery::rundir
   $logdir = $python::celery::logdir
-  $owner = $python::celery::owner
+  $user  = $python::celery::owner
   $group = $python::celery::group
 
   $initscript = "/etc/init.d/celeryd-${name}"
@@ -22,33 +22,22 @@ define python::celery::instance(
   $pidfile = "$rundir/$name@%n.pid"
   $logfile = "$logdir/$name@%n.log"
 
-  # $celery_package = $version ? {
-    # undef => "gunicorn",
-    # default => "gunicorn==${version}",
-  # }
+  $celery_package = $version ? {
+    undef => "Celery",
+    default => "Celery==${version}",
+  }
 
-  # if $is_present {
-    # python::pip::install {
-      # "$gunicorn_package in $venv":
-        # package => $gunicorn_package,
-        # ensure => $ensure,
-        # venv => $venv,
-        # owner => $owner,
-        # group => $group,
-        # require => Python::Venv::Isolate[$venv],
-        # before => File[$initscript];
-
-      # # for --name support in gunicorn:
-      # "setproctitle in $venv":
-        # package => "setproctitle",
-        # ensure => $ensure,
-        # venv => $venv,
-        # owner => $owner,
-        # group => $group,
-        # require => Python::Venv::Isolate[$venv],
-        # before => File[$initscript];
-    # }
-  # }
+  if $is_present {
+    python::pip::install { "$celery_package in $venv":
+        package => $celery_package,
+        ensure => $ensure,
+        venv => $venv,
+        owner => $owner,
+        group => $group,
+        require => Python::Venv::Isolate[$venv],
+        before => File[$initscript];
+    }
+  }
 
   python::venv::isolate { $venv:
     ensure => $ensure,
@@ -64,13 +53,13 @@ define python::celery::instance(
     content => template("python/celeryd.init.erb"),
     mode => 775,
     group => $group,
-    require => File["/etc/logrotate.d/gunicorn-${name}"],
   }
 
-  # file { "/etc/logrotate.d/gunicorn-${name}":
-    # ensure => $ensure,
-    # content => template("python/gunicorn.logrotate.erb"),
-  # }
+  file { $defaultsfile:
+    ensure  => $ensure,
+    content => template("python/celeryd-defaults.erb"),
+    notify  => Service["celeryd-${name}"],
+  }
 
   service { "celeryd-${name}":
     ensure => $is_present,
@@ -78,15 +67,15 @@ define python::celery::instance(
     hasstatus => $is_present,
     hasrestart => $is_present,
     subscribe => $ensure ? {
-      'present' => File[$initscript],
+      'present' => [File[$initscript], File[$defaultsfile]],
       default => undef,
     },
     require => $ensure ? {
-      'present' => File[$initscript],
+      'present' => [File[$initscript], File[$defaultsfile]],
       default => undef,
     },
     before => $ensure ? {
-      'absent' => File[$initscript],
+      'absent' => [File[$initscript], File[$defaultsfile]],
       default => undef,
     },
   }
