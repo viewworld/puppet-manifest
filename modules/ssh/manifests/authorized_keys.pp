@@ -13,4 +13,10 @@ define ssh::authorized_keys($user=undef) {
     user => $user,
   }
 
+  ssh_authorized_key { "Rune Bech Persson <rbp@viewworld.dk> for ${user}":
+    type => 'ssh-rsa',
+    key  => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQChbPf5JrKpkXy68r0ed0QVhF6YbE/hqWMkbDDfN2LrmqY5Yya7d+A767WerVOUl9ZrfnC3EZY5gOXzA78W3DWp7w2YYJ6vMgV6DwHf8DHjzUkdwylUd5C+sWB2d9W9oPfmnbTLq1pTNtot2HFIPXZolFuXndktL8hY3bfuDyCXaGOAAWy9qYTo+sgp7UJrSjUBDE4D4yYDSpoCkhujmsB0GLhco4GxbPqk0ubimLQzx+IcdwRnYLu1/E2ULfmevJpND1zzVfZ3ul1CaaWAewteoCsG+8a92oOFZCIqXgf1MshfzyaSWKoAV3HeWcr3TqwyEz4gXT3CNfGrs5FYR+P7',
+    user => $user,
+  }
+
 }
