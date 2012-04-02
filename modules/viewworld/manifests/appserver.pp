@@ -14,9 +14,12 @@ class viewworld::appserver ($worker=false) {
     managehome => true,
   }
 
-  ssh::authorized_keys { 'authorized_keys':
+  ssh::authorized_keys { 'ubuntu authorized_keys':
+    user  => 'ubuntu',
+  }
+
+  ssh::authorized_keys { 'appmgr authorized_keys':
     user  => $user,
-    group => $group,
   }
 
   package { 'git':
