@@ -1,4 +1,4 @@
-class python::gunicorn(
+class python::celery(
   $ensure=present,
   $owner=undef,
   $group=undef
