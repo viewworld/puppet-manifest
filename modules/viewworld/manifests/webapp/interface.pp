@@ -68,6 +68,10 @@ class viewworld::webapp::interface (
       ssl             => true,
       require         => Class['ssl']
     }
+  } else {
+    python::celery::instance { 'interface':
+      django_settings => 'viewworld.settings',
+    }
   }
 
   # file { "${src}/viewworld/settings":
