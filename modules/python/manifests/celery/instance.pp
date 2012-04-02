@@ -18,7 +18,7 @@ define python::celery::instance(
   $group = $python::celery::group
 
   $initscript = "/etc/init.d/celeryd-${name}"
-  $defaultsfile = "/etc/defaults/celeryd-${name}"
+  $defaultsfile = "/etc/default/celeryd-${name}"
   $pidfile = "$rundir/$name@%n.pid"
   $logfile = "$logdir/$name@%n.log"
 
