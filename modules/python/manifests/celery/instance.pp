@@ -1,19 +1,21 @@
-define python::gunicorn::instance(
-  $venv,
-  $src,
+define python::celery::instance(
   $ensure=present,
   $django_settings="",
+  $requirements=false,
   $version=undef,
   $workers=1,
   $timeout_seconds=30
 ) {
 
+  $venv = "${webapp::python::venv_root}/$name"
+  $src = "${webapp::python::src_root}/$name"
+
   $is_present = $ensure == "present"
 
-  $rundir = $python::celeryd::rundir
-  $logdir = $python::celeryd::logdir
-  $owner = $python::celeryd::owner
-  $group = $python::celeryd::group
+  $rundir = $python::celery::rundir
+  $logdir = $python::celery::logdir
+  $owner = $python::celery::owner
+  $group = $python::celery::group
 
   $initscript = "/etc/init.d/celeryd-${name}"
   $defaultsfile = "/etc/defaults/celeryd-${name}"
@@ -51,6 +53,15 @@ define python::gunicorn::instance(
         # before => File[$initscript];
     # }
   # }
+
+  python::venv::isolate { $venv:
+    ensure => $ensure,
+    requirements => $requirements ? {
+      true => "$src/requirements.txt",
+      false => undef,
+      default => "$src/$requirements",
+    },
+  }
 
   file { $initscript:
     ensure => $ensure,
