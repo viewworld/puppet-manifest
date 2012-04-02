@@ -22,10 +22,6 @@ define python::celery::instance(
   $pidfile = "$rundir/$name@%n.pid"
   $logfile = "$logdir/$name@%n.log"
 
-  if $django_settings != "" and !$django {
-    fail("If you're not using Django you can't define a settings file.")
-  }
-
   # $celery_package = $version ? {
     # undef => "gunicorn",
     # default => "gunicorn==${version}",

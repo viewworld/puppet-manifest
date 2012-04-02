@@ -11,9 +11,11 @@ $ cat ~/.ssh/id_rsa.pub | ssh -i rbpkey.pem $HOSTNAME tee -a .ssh/authorized_key
 $ echo $HOSTNAME | sudo tee /etc/hostname
 $ sudo hostname -F /etc/hostname
 $ echo 127.0.0.1  $HOSTNAME.viewworld.dk $HOSTNAME | sudo tee /etc/hosts
+$ echo $PUPPETMASTERIP puppet.viewworld.dk puppet
 
 $ sudo aptitude update
 $ sudo aptitude upgrade
+$ sudo ntpdate ntp.ubuntu.com
 
 # If on micro instance: setup swap for exist installation
 $ sudo dd if=/dev/zero of=/var/swapfile bs=1M count=512
