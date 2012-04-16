@@ -10,7 +10,7 @@ Exec {
 }
 
 
-node test, /^test\d+$/ {
+node /^production\d+$/, test, /^test\d+$/ {
 
   include ldap
   include exist
