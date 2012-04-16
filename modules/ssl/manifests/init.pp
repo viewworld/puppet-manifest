@@ -26,7 +26,7 @@ class ssl {
   }
 
   exec { 'chain certificates':
-    command => "cat /etc/ssl/certs/gd_bundle.pem /etc/ssl/private/viewworld > ${key}",
+    command => "cat /etc/ssl/private/viewworld /etc/ssl/certs/gd_bundle.pem > ${key}",
     creates => $key,
     require => [File['/etc/ssl/certs/gd_bundle.pem'], File['/etc/ssl/private/viewworld']],
   }
