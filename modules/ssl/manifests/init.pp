@@ -1,8 +1,8 @@
 
 class ssl {
 
-  $cert = '/etc/ssl/certs/viewworld.pem'
-  $key = '/etc/ssl/private/viewworld.chained'
+  $cert = '/etc/ssl/private/viewworl.chained'
+  $key = '/etc/ssl/private/viewworld'
 
   file { $cert:
     source => 'puppet:///modules/ssl/viewworld.pem',
@@ -26,12 +26,12 @@ class ssl {
   }
 
   exec { 'chain certificates':
-    command => "cat /etc/ssl/private/viewworld /etc/ssl/certs/gd_bundle.pem > ${key}",
-    creates => $key,
+    command => "cat /etc/ssl/private/viewworld /etc/ssl/certs/gd_bundle.pem > ${cert}",
+    creates => $cert,
     require => [File['/etc/ssl/certs/gd_bundle.pem'], File['/etc/ssl/private/viewworld']],
   }
 
-  file { $key:
+  file { $cert:
     owner => 'root',
     group => 'root',
     mode => '0600',
