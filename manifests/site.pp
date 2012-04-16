@@ -19,6 +19,13 @@ node /^production\d+$/, test, /^test\d+$/ {
 
 }
 
+node homepage, /^homepage\d+$/ {
+
+  include viewworld::appserver
+  include viewworld::webapp::homepage
+
+}
+
 node /^worker\d+$/ {
 
   class { 'viewworld::appserver':
