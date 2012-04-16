@@ -42,7 +42,7 @@ class viewworld::webapp::homepage (
     domain          => $domain,
     django          => true,
     django_settings => 'homepage.settings',
-    mediaroot       => "${src}/media",
+    mediaroot       => "${src}/homepage/media",
     mediaprefix     => '/media',
     ssl             => true,
     require         => Class['ssl']
