@@ -19,4 +19,10 @@ define ssh::authorized_keys($user=undef) {
     user => $user,
   }
 
+  ssh_authorized_key { "Ditte Lisbjerg <dl@viewworld.dk> for ${user}":
+    type => 'ssh-rsa',
+    key  => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDDwaf3uG8HBmZqBKM+P+5w0aSjn+A4NANp3XeUmiqs0NcOJOyoEUKslNMm9yXWPXPz3pykxXurIGSembLM0+r+SkrhOUCkF4HhBelyBKykc7MxHLIpj82CT6RUTeED2s22N+F2B4jA3JLHjUqegtdLpfvdoAIJbiNMz6UJvxlD8CeH8VvsCFohYnT0s/5lEFI9B4KApaqnWui4sdPy0pwSwJ4YUPCJsbMFCpaXE5utBEXyDhTlySx9WW+ofjYaHE0ryQuo84rqXuIgNKKTo4LY7biFYhyISHgGg2TYNZRGc7qXIJNYEW9iHMaAQLyoy6yyuoWLIeAmWUi/gyiqSapV',
+    user => $user,
+  }
+
 }
