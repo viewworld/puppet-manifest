@@ -23,8 +23,8 @@ define python::celery::instance(
   $logfile = "$logdir/$name@%n.log"
 
   $celery_package = $version ? {
-    undef => "Celery",
-    default => "Celery==${version}",
+    undef => "celery",
+    default => "celery==${version}",
   }
 
   if $is_present {
