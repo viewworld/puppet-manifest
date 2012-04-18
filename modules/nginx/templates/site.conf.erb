@@ -40,19 +40,27 @@ server {
   keepalive_timeout 5;
 
   <% unless mediaroot.empty? %>
-  location = /favicon.ico {
-    alias <%= absolute_mediaroot %>/images/favicon.ico;
-    access_log off;
-  }
-
   location <%= mediaprefix %> {
     alias <%= absolute_mediaroot %>;
     expires max;
     access_log off;
   }
+  <% end %>
 
-  location <%= mediaprefix %>/admin {
+  location <%= adminmediaprefix %> {
     alias <%= venv %>/lib/python2.7/site-packages/django/contrib/admin/media;
+    expires max;
+    access_log off;
+  }
+
+  <% unless staticroot.empty? %>
+  location = /favicon.ico {
+    alias <%= absolute_staticroot %>/images/favicon.ico;
+    access_log off;
+  }
+
+  location <%= staticprefix %> {
+    alias <%= absolute_staticroot %>;
     expires max;
     access_log off;
   }

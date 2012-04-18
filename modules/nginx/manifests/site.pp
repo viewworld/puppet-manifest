@@ -5,6 +5,9 @@ define nginx::site($domain,
                    $group=undef,
                    $mediaroot="",
                    $mediaprefix="",
+                   $staticroot="",
+                   $staticprefix="",
+                   $adminmediaprefix="",
                    $default_vhost=false,
                    $autoindex=false,
                    $rewrite_missing_html_extension=false,
@@ -15,6 +18,7 @@ define nginx::site($domain,
                    $ssl_certificate_key="") {
 
   $absolute_mediaroot = inline_template("<%= File.expand_path(mediaroot, root) %>")
+  $absolute_staticroot = inline_template("<%= File.expand_path(staticroot, root) %>")
 
   if $ensure == 'present' {
     # Parent directory of root directory. /var/www for /var/www/blog

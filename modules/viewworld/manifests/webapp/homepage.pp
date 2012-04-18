@@ -42,8 +42,7 @@ class viewworld::webapp::homepage (
     domain          => $domain,
     django          => true,
     django_settings => 'homepage.settings',
-    mediaroot       => "${src}/homepage/media",
-    mediaprefix     => '/media',
+    staticroot      => "${src}/homepage/static",
   }
 
   Class['viewworld::appserver'] -> Class['viewworld::webapp::homepage']

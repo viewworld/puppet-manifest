@@ -63,8 +63,7 @@ class viewworld::webapp::interface (
       domain          => $domain,
       django          => true,
       django_settings => 'viewworld.settings',
-      mediaroot       => "${src}/viewworld/static",
-      mediaprefix     => '/static',
+      staticroot      => "${src}/viewworld/static",
       ssl             => true,
       require         => Class['ssl']
     }
