@@ -1,6 +1,14 @@
+<% if ssl %>
+ssl_certificate <%= ssl_certificate %>;
+ssl_certificate_key <%= ssl_certificate_key %>;
+<% end %>
+
 <% unless aliases.empty? %>
 server {
   listen 80;
+  <% if ssl %>
+  listen 443;
+  <% end %>
   server_name<% aliases.each do |a| %> <%= a %><% end %>;
   rewrite ^ http<% if ssl %>s<% end %>://<%= domain %>$request_uri? permanent;
 }
@@ -23,21 +31,21 @@ upstream <%= name %> {
 <% end %>
 
 server {
-  listen <% if ssl %>443<% else %>80<% end %><% if default_vhost %> default deferred<% end %>;
+  listen <% if ssl %>443 ssl<% else %>80<% end %><% if default_vhost %> default deferred<% end %>;
   client_max_body_size 4G;
   server_name <%= domain %>;
-
-  <% if ssl %>
-  ssl on;
-  ssl_certificate <%= ssl_certificate %>;
-  ssl_certificate_key <%= ssl_certificate_key %>;
-  <% end %>
 
   root <%= root %>;
 
   access_log  /var/log/nginx/<%= name %>.access.log;
 
   keepalive_timeout 5;
+
+  <% if hostname == 'production1' %>
+  if ($host = 'www.viewworld.dk') {
+    rewrite ^/reports https://viewworld.dk$request_uri? permanent;
+  }
+  <% end %>
 
   <% unless mediaroot.empty? %>
   location <%= mediaprefix %> {

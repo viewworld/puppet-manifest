@@ -15,7 +15,17 @@ node /^production\d+$/, test, /^test\d+$/ {
   include ldap
   include exist
   include viewworld::appserver
-  include viewworld::webapp::interface
+
+  case $hostname {
+    'production1': {
+      class { 'viewworld::webapp::interface':
+        domain  => 'viewworld.dk',
+      }
+    }
+    default: {
+      include viewworld::webapp::interface
+    }
+  }
 
 }
 

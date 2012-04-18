@@ -1,6 +1,7 @@
 
 class viewworld::webapp::interface (
   $domain="${hostname}.viewworld.dk",
+  $aliases=[],
   $worker=false
 ) {
 
@@ -61,6 +62,7 @@ class viewworld::webapp::interface (
   if !$worker {
     webapp::python::instance { 'interface':
       domain          => $domain,
+      aliases         => $aliases,
       django          => true,
       django_settings => 'viewworld.settings',
       staticroot      => "${src}/viewworld/static",
