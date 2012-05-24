@@ -35,7 +35,7 @@ node homepage, /^homepage\d+$/ {
   include viewworld::webapp::homepage
 
   class { 'viewworld::webapp::docs':
-    domain => 'docs.viewworld.dk',
+    domain => 'docs.viewworld.net',
   }
 }
 
