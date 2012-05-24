@@ -55,11 +55,13 @@ server {
   }
   <% end %>
 
+  <% unless adminmediaprefix.empty? %>
   location <%= adminmediaprefix %> {
     alias <%= venv %>/lib/python2.7/site-packages/django/contrib/admin/media;
     expires max;
     access_log off;
   }
+  <% end %>
 
   <% unless staticroot.empty? %>
   location = /favicon.ico {
