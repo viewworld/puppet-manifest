@@ -34,6 +34,9 @@ node homepage, /^homepage\d+$/ {
   include viewworld::appserver
   include viewworld::webapp::homepage
 
+  class { 'viewworld::webapp::docs':
+    domain => 'docs.viewworld.dk',
+  }
 }
 
 node /^worker\d+$/ {
