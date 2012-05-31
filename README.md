@@ -1,5 +1,4 @@
 
-
 # Setting up a new server
 
 ```console
@@ -46,13 +45,36 @@ local:~/console$ fab master deploy -H $HOSTNAME.viewworld.dk
 source-server:~$ ldapsearch -x -LLL -D cn=admin,dc=viewworld,dc=dk -W -b dc=viewworld,dc=dk | tee viewworld.ldif
 source-server:~$ cd /var/lib/exist
 source-server:/var/lib/exist$ sudo tar -czpf exist.tar.gz *
+```
 
-# copy viewworld.ldif and exist.tar.gz to dest server
+Copy `viewworld.ldif` and `exist.tar.gz` to dest server.
 
+```console
 dest-server:~$ # remove password prompt from viewworld.ldif
 dest-server:~$ ldapadd -x -D cn=admin,dc=viewworld,dc=dk -W -c -f viewworld.ldif
 dest-server:~$ cd /var/lib/exist
 dest-server:/var/lib/exist$ sudo rm -r *
 dest-server:/var/lib/exist$ sudo tar -xzf ~/exist.tar.gz
 dest-server:/var/lib/exist$ sudo chown -R exist:exist *
+```
+
+# Deploy config changes
+
+```console
+$ git remote add puppet puppet.viewworld.dk:/etc/puppet
+$ git push puppet master
+```
+
+The servers will pick up the change automatically if `puppet agent` is
+running. Agents can be started with:
+
+```console
+$ fab start_agent
+```
+
+If the change needs to be deployed immediately, a config reload can be forced with
+```console
+$ fab reload_agents
+$ # or if only needed on specific hosts
+$ fab -H host1.viewworld.dk,host2.viewworld.dk apply_config
 ```
