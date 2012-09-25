@@ -29,7 +29,7 @@ define webapp::python::instance($domain,
 
   if $ssl {
     include ssl
-    $ssl_certificate = $Ssl::chained
+    $ssl_certificate = $Ssl::bundle
     $ssl_certificate_key = $Ssl::key
     Class['ssl'] -> Nginx::Site[$name]
   } else {

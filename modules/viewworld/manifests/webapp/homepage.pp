@@ -44,6 +44,8 @@ class viewworld::webapp::homepage (
     django_settings => 'homepage.settings',
     mediaroot       => "${src}/homepage/media",
     staticroot      => "${src}/homepage/static",
+    ssl             => true,
+    require         => Class['ssl']
   }
 
   Class['viewworld::appserver'] -> Class['viewworld::webapp::homepage']
