@@ -25,7 +25,10 @@ def get_agent_pid():
 @task
 def start_agent():
     if get_agent_pid() is None:
-        sudo('puppet agent')
+        with settings(hide('warnings'), warn_only=True):
+            res = sudo('puppet agent')
+            if res.return_code in (4, 6):
+                abort('puppet agent had failures')
     else:
         puts(colors.cyan('Agent already running'))
 
