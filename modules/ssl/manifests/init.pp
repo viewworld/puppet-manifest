@@ -8,7 +8,8 @@ class ssl {
 
   $bundle_filename = $hostname ? {
     /homepage(\d+)?/ => 'viewworldnet-bundle.pem',
-    default          => 'viewworlddk-bundle.pem',
+    'production1'    => 'viewworld.dk.crt',
+    default          => 'viewworlddk-bundle.pem', # expires on 2013-03-15
   }
 
   $key = '/etc/ssl/private/viewworld'
