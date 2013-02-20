@@ -8,9 +8,7 @@ env.user = 'ubuntu'
 if not env.hosts:
     env.hosts = [
         'viewworld.dk',
-        'viewworld.net',
         'worker1.viewworld.dk',
-        'test.viewworld.dk'
     ]
 
 def get_agent_pid():
