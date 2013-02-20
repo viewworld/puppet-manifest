@@ -56,3 +56,11 @@ def agent_test(noop='off', debug='off'):
     if debug != 'off':
         cmd.append('--debug')
     sudo(' '.join(cmd))
+
+@task
+def ping_agent():
+    pid = get_agent_pid()
+    if pid:
+        puts(colors.green('Agent running'))
+    else:
+        puts(colors.yellow('Agent not running'))
