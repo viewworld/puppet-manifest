@@ -55,7 +55,10 @@ def agent_test(noop='off', debug='off'):
         cmd.append('--noop')
     if debug != 'off':
         cmd.append('--debug')
-    sudo(' '.join(cmd))
+    with settings(hide('warnings'), warn_only=True):
+        res = sudo(' '.join(cmd))
+        if res.return_code in (4, 6):
+            abort('puppet agent had failures')
 
 @task
 def ping_agent():
