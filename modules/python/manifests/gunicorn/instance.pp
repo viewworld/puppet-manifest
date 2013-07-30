@@ -4,6 +4,8 @@ define python::gunicorn::instance($venv,
                                   $wsgi_module="",
                                   $django=false,
                                   $django_settings="",
+                                  $paster=false,
+                                  $paster_config="",
                                   $version=undef,
                                   $workers=1,
                                   $timeout_seconds=30) {
@@ -19,16 +21,22 @@ define python::gunicorn::instance($venv,
   $socket = "unix:$rundir/$name.sock"
   $logfile = "$logdir/$name.log"
 
-  if $wsgi_module == "" and !$django {
+  if $wsgi_module == "" and !$django and !$paster {
     fail("If you're not using Django you have to define a WSGI module.")
   }
 
   if $django_settings != "" and !$django {
     fail("If you're not using Django you can't define a settings file.")
   }
+  if $paster_config != "" and !$paster {
+    fail("If you're not using Paster you can't define a config file.")
+  }
 
-  if $wsgi_module != "" and $django {
-    fail("If you're using Django you can't define a WSGI module.")
+  if $django and $paster {
+    fail("You can't use Django and Paster simultaneously.")
+  }
+  if $wsgi_module != "" and ($django or $paster) {
+    fail("If you're using Django or Paster you can't define a WSGI module.")
   }
 
   $gunicorn_package = $version ? {

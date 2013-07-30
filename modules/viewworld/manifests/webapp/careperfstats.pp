@@ -27,11 +27,12 @@ class viewworld::webapp::careperfstats (
   }
 
   webapp::python::instance { 'careperfstats':
-    domain          => $domain,
-    aliases         => $aliases,
-    django          => false,
-    staticroot      => "${src}/careperfstats/static",
-    ssl             => false
+    domain        => $domain,
+    aliases       => $aliases,
+    paster        => true,
+    paster_config => "${src}/production.ini",
+    staticroot    => "${src}/careperfstats/static",
+    ssl           => false
   }
 
   Class['viewworld::appserver'] -> Class['viewworld::webapp::careperfstats']
