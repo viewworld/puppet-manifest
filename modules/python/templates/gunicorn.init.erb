@@ -4,7 +4,7 @@ NAME=gunicorn-<%= name %>
 DESC=$NAME
 VENV=<%= venv %>
 SRC=<%= src %>
-DAEMON=$VENV/bin/gunicorn<% if django %>_django<% else if paster %>_paster<% end %>
+DAEMON=$VENV/bin/gunicorn<% if django %>_django<% elsif paster %>_paster<% end %>
 <% if owner == 'undef' or group == 'undef' %>
 CHOWN=""
 <% else %>
