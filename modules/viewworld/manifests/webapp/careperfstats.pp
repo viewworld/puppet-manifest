@@ -5,6 +5,7 @@ class viewworld::webapp::careperfstats (
 ) {
 
   $binary_deps = [
+    'libpq-dev'
   ]
 
   package { $binary_deps:
