@@ -49,3 +49,10 @@ node /^worker\d+$/ {
   }
 
 }
+
+node 'care-dev' {
+
+  include viewworld::appserver
+  include viewworld::webapp::careperfstats
+
+}
