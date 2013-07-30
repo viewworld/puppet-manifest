@@ -34,6 +34,12 @@ if [ ! -d $RUNDIR ]; then
   <% end %>
 fi
 
+<% if owner != 'undef' %>
+if [ -f /home/<%= owner %>/env.sh ]; then
+    . /home/<%= owner %>/env.sh
+fi
+<% end %>
+
 case "$1" in
   start)
     echo -n "Starting $DESC: "
