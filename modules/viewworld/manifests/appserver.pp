@@ -1,5 +1,5 @@
 
-class viewworld::appserver ($worker=false) {
+class viewworld::appserver ($webserver=true, $celery=false) {
 
   $user = 'appmgr'
   $group = 'appmgr'
@@ -43,11 +43,12 @@ class viewworld::appserver ($worker=false) {
     group     => $group,
     src_root  => $src_root,
     venv_root => $venv_root,
-    worker    => $worker,
+    webserver => $webserver,
+    celery    => $celery,
     require   => User[$user],
   }
 
-  if !$worker {
+  if $webserver {
     include ssl
   }
 

@@ -4,14 +4,12 @@ class webapp::python(
   $group='www-data',
   $src_root='/usr/local/src',
   $venv_root='/usr/local/venv',
-  $worker=false,
+  $celery=false,
+  $webserver=true,
   $nginx_workers=1,
   $monit_admin="",
   $monit_interval=60
 ) {
-
-  if !$worker {
-  }
 
   class { 'python::dev':
     ensure => $ensure,
@@ -23,26 +21,23 @@ class webapp::python(
     group => $group
   }
 
-  if !$worker {
-
+  if $webserver {
     class { 'nginx':
       ensure => $ensure,
       workers => $nginx_workers
     }
-
     class { 'python::gunicorn':
       ensure => $ensure,
       owner => $owner,
       group => $group
     }
+  }
 
-  } else {
-
+  if $celery {
     class { 'python::celery':
       owner => $owner,
       group => $group,
     }
-
   }
 
   class { monit:

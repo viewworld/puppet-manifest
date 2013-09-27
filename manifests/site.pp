@@ -42,7 +42,8 @@ node homepage, /^homepage\d+$/ {
 node /^worker\d+$/ {
 
   class { 'viewworld::appserver':
-    worker => true,
+    webserver => false,
+    celery => true,
   }
   class { 'viewworld::webapp::interface':
     worker => true,
@@ -52,7 +53,10 @@ node /^worker\d+$/ {
 
 node 'care-dev' {
 
-  include viewworld::appserver
+  include rabbitmq
+  class { 'viewworld::appserver':
+    celery => true,
+  }
   include viewworld::webapp::careperfstats
 
 }
