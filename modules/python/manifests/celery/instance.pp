@@ -1,5 +1,6 @@
 define python::celery::instance(
   $ensure=present,
+  $pyramid_config="",
   $django=true,
   $django_settings="",
   $requirements=false,

@@ -38,6 +38,7 @@ class viewworld::webapp::careperfstats (
 
   python::celery::instance { 'careperfstats':
     app => "careperfstats.clry.celery",
+    pyramid_config => "${src}/production.ini",
     django => false,
     install_venv => false,
   }

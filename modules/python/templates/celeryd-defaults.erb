@@ -27,3 +27,7 @@ CELERYD_GROUP="<%= group %>"
 # If enabled pid and log directories will be created if missing,
 # and owned by the userid/group configured.
 CELERY_CREATE_DIRS=1
+
+<% if @pyramid_config %>
+export PYRAMID_CONFIG=<%= @pyramid_config %>
+<% end %>
