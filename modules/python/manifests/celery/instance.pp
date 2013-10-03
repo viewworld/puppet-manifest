@@ -1,12 +1,11 @@
 define python::celery::instance(
   $ensure=present,
-  $app="",
   $django=true,
   $django_settings="",
   $requirements=false,
   $version=undef,
+  $app="",
   $workers=1,
-  $timeout_seconds=30,
   $install_venv=true
 ) {
 
@@ -22,8 +21,8 @@ define python::celery::instance(
 
   $initscript = "/etc/init.d/celeryd-${name}"
   $defaultsfile = "/etc/default/celeryd-${name}"
-  $pidfile = "$rundir/$name@%n.pid"
-  $logfile = "$logdir/$name@%n.log"
+  $pidfile = "$rundir/${name}/%N.pid"
+  $logfile = "$logdir/${name}/%N.log"
 
   $celery_package = $version ? {
     undef => "celery",
@@ -54,10 +53,8 @@ define python::celery::instance(
   }
 
   file { $initscript:
-    ensure => $ensure,
-    content => template("python/celeryd.init.erb"),
-    mode => 775,
-    group => $group,
+    ensure => "link",
+    target => $python::celery::initscript,
   }
 
   file { $defaultsfile:

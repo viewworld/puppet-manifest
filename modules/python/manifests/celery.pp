@@ -7,6 +7,15 @@ class python::celery(
   $rundir = "/var/run/celery"
   $logdir = "/var/log/celery"
 
+  $initscript = "/etc/init.d/celeryd"
+
+  file { $initscript:
+    ensure => $ensure,
+    content => template("python/celeryd.init.erb"),
+    mode => 775,
+    group => $group,
+  }
+
   if $ensure == "present" {
     file { [$rundir, $logdir]:
       ensure => directory,

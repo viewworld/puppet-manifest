@@ -1,35 +1,29 @@
+# Names of nodes to start
+# CELERYD_NODES=
+
+# Absolute or relative path to the 'celery' command:
+CELERY_BIN="<%= @venv %>/bin/celery"
+
+# App instance to use
+# comment out this line if you don't use an app
+CELERY_APP="<%= @app %>"
+
 # Where to chdir at start.
-CELERYD_CHDIR="<%= src %>"
+CELERYD_CHDIR="<%= @src %>"
 
-# Python interpreter from environment.
-ENV_PYTHON="<%= venv %>/bin/python"
+# Extra command-line arguments to the worker
+CELERYD_OPTS="--concurrency=<%= @workers %>"
 
-# How to call "manage.py celeryd_multi"
-<% if @django %>
-CELERYD_MULTI="$ENV_PYTHON $CELERYD_CHDIR/manage.py celeryd_multi"
-<% else %>
-CELERYD_MULTI="PYTHONPATH=<%= @src %> <%= @venv %>/bin/celeryd_multi --app <%= @app %>"
-<% end %>
-
-# How to call "manage.py celeryctl"
-<% if @django %>
-CELERYCTL="$ENV_PYTHON $CELERYD_CHDIR/manage.py celeryctl"
-<% else %>
-CELERYCTL="PYTHONPATH=<%= @src %> <%= @venv %>/bin/celeryctl --app <%= @app %>"
-<% end %>
-
-# Name of the celery config module.
-CELERY_CONFIG_MODULE="celeryconfig"
-
-# %n will be replaced with the nodename.
-CELERYD_LOG_FILE="<%= logfile %>"
-CELERYD_PID_FILE="<%= pidfile %>"
+# %N will be replaced with the first part of the nodename.
+CELERYD_LOG_FILE="<%= @logfile %>"
+CELERYD_PID_FILE="<%= @pidfile %>"
 
 # Workers should run as an unprivileged user.
+#   You need to create this user manually (or you can choose
+#   a user/group combination that already exists, e.g. nobody).
 CELERYD_USER="<%= user %>"
 CELERYD_GROUP="<%= group %>"
 
-CELERYD_WORKERS=<%= @workers %>
-
-# Name of the projects settings module.
-export DJANGO_SETTINGS_MODULE="<%= django_settings %>"
+# If enabled pid and log directories will be created if missing,
+# and owned by the userid/group configured.
+CELERY_CREATE_DIRS=1
