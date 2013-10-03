@@ -7,7 +7,7 @@ define python::celery::instance(
   $version=undef,
   $workers=1,
   $timeout_seconds=30,
-  $install_venv=true,
+  $install_venv=true
 ) {
 
   $venv = "${webapp::python::venv_root}/$name"
