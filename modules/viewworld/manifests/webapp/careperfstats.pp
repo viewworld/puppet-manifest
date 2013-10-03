@@ -20,6 +20,12 @@ class viewworld::webapp::careperfstats (
     group => $viewworld::appserver::group,
   }
 
+  file { "$src/careperfstats/file_uploads":
+    ensure => directory,
+    owner => $viewworld::appserver::user,
+    group => $viewworld::appserver::group,
+  }
+
   exec { 'interface git':
     command => "git init ${src}",
     creates => "${src}/.git/config",
