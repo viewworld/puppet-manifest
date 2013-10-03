@@ -39,6 +39,7 @@ class viewworld::webapp::careperfstats (
   python::celery::instance { 'careperfstats':
     app => "careperfstats.clry.celery",
     django => false,
+    install_venv => false,
   }
 
   Class['viewworld::appserver'] -> Class['viewworld::webapp::careperfstats']

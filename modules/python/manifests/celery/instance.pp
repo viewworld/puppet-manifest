@@ -6,7 +6,8 @@ define python::celery::instance(
   $requirements=false,
   $version=undef,
   $workers=1,
-  $timeout_seconds=30
+  $timeout_seconds=30,
+  $install_venv=true,
 ) {
 
   $venv = "${webapp::python::venv_root}/$name"
@@ -41,13 +42,15 @@ define python::celery::instance(
     }
   }
 
-  python::venv::isolate { $venv:
-    ensure => $ensure,
-    requirements => $requirements ? {
-      true => "$src/requirements.txt",
-      false => undef,
-      default => "$src/$requirements",
-    },
+  if $install_venv {
+    python::venv::isolate { $venv:
+      ensure => $ensure,
+      requirements => $requirements ? {
+        true => "$src/requirements.txt",
+        false => undef,
+        default => "$src/$requirements",
+      },
+    }
   }
 
   file { $initscript:
