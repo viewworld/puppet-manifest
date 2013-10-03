@@ -1,5 +1,7 @@
 define python::celery::instance(
   $ensure=present,
+  $app="",
+  $django=true,
   $django_settings="",
   $requirements=false,
   $version=undef,

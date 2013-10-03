@@ -36,6 +36,11 @@ class viewworld::webapp::careperfstats (
     ssl           => false
   }
 
+  python::celery::instance { 'careperfstats':
+    app => "careperfstats.clry.celery",
+    django => false,
+  }
+
   Class['viewworld::appserver'] -> Class['viewworld::webapp::careperfstats']
 
 }

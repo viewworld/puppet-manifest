@@ -5,10 +5,18 @@ CELERYD_CHDIR="<%= src %>"
 ENV_PYTHON="<%= venv %>/bin/python"
 
 # How to call "manage.py celeryd_multi"
+<% if @django %>
 CELERYD_MULTI="$ENV_PYTHON $CELERYD_CHDIR/manage.py celeryd_multi"
+<% else %>
+CELERYD_MULTI="PYTHONPATH=<%= @src %> <%= @venv %>/bin/celeryd_multi --app <%= @app %>"
+<% end %>
 
 # How to call "manage.py celeryctl"
+<% if @django %>
 CELERYCTL="$ENV_PYTHON $CELERYD_CHDIR/manage.py celeryctl"
+<% else %>
+CELERYCTL="PYTHONPATH=<%= @src %> <%= @venv %>/bin/celeryctl --app <%= @app %>"
+<% end %>
 
 # Name of the celery config module.
 CELERY_CONFIG_MODULE="celeryconfig"
@@ -20,6 +28,8 @@ CELERYD_PID_FILE="<%= pidfile %>"
 # Workers should run as an unprivileged user.
 CELERYD_USER="<%= user %>"
 CELERYD_GROUP="<%= group %>"
+
+CELERYD_WORKERS=<%= @workers %>
 
 # Name of the projects settings module.
 export DJANGO_SETTINGS_MODULE="<%= django_settings %>"

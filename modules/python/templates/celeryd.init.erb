@@ -59,6 +59,9 @@ if [ ! -d "$CELERYD_PID_DIR" ]; then
 fi
 
 # Extra start-stop-daemon options, like user/group.
+if [ -n "$CELERYD_WORKERS" ]; then
+    DAEMON_OPTS="$DAEMON_OPTS --workers=$CELERYD_WORKERS"
+fi
 if [ -n "$CELERYD_USER" ]; then
     DAEMON_OPTS="$DAEMON_OPTS --uid=$CELERYD_USER"
     chown "$CELERYD_USER" $CELERYD_LOG_DIR $CELERYD_PID_DIR
