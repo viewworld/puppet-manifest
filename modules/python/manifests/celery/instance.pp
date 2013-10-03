@@ -22,8 +22,8 @@ define python::celery::instance(
 
   $initscript = "/etc/init.d/celeryd-${name}"
   $defaultsfile = "/etc/default/celeryd-${name}"
-  $pidfile = "$rundir/${name}/%N.pid"
-  $logfile = "$logdir/${name}/%N.log"
+  $pidfile = "$rundir/${name}/%n.pid"
+  $logfile = "$logdir/${name}/%n.log"
 
   $celery_package = $version ? {
     undef => "celery",
