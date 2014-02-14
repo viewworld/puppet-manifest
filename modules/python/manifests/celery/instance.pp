@@ -56,6 +56,7 @@ define python::celery::instance(
   file { $initscript:
     ensure => $ensure,
     source => $python::celery::initscript,
+    mode   => 755,
   }
 
   file { $defaultsfile:

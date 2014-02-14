@@ -12,6 +12,7 @@ class python::celery(
   file { $initscript:
     ensure => $ensure,
     content => template("python/celeryd.init.erb"),
+    mode => 755,
   }
 
   if $ensure == "present" {
