@@ -36,8 +36,8 @@ export DJANGO_SETTINGS_MODULE=<%= @django_settings %>
 export PYRAMID_CONFIG=<%= @pyramid_config %>
 <% end %>
 
-<% if @owner != 'undef' %>
-if [ -f /home/<%= @owner %>/env.sh ]; then
-    . /home/<%= @owner %>/env.sh
+<% if @user != 'undef' %>
+if [ -f /home/<%= @user %>/env.sh ]; then
+    . /home/<%= @user %>/env.sh
 fi
 <% end %>
