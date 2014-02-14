@@ -54,8 +54,8 @@ define python::celery::instance(
   }
 
   file { $initscript:
-    ensure => "link",
-    target => $python::celery::initscript,
+    ensure => $ensure,
+    source => $python::celery::initscript,
   }
 
   file { $defaultsfile:

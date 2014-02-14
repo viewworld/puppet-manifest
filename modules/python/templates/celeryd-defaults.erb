@@ -1,5 +1,5 @@
 # Names of nodes to start
-# CELERYD_NODES=
+CELERYD_NODES="worker1"
 
 # Absolute or relative path to the 'celery' command:
 CELERY_BIN="<%= @venv %>/bin/celery"
@@ -30,4 +30,10 @@ CELERY_CREATE_DIRS=1
 
 <% if @pyramid_config %>
 export PYRAMID_CONFIG=<%= @pyramid_config %>
+<% end %>
+
+<% if @owner != 'undef' %>
+if [ -f /home/<%= @owner %>/env.sh ]; then
+    . /home/<%= @owner %>/env.sh
+fi
 <% end %>

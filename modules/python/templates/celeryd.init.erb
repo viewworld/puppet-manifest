@@ -104,11 +104,6 @@ if [ -f "$CELERY_DEFAULTS" ]; then
     . "$CELERY_DEFAULTS"
 fi
 
-<% if @owner != 'undef' %>
-if [ -f /home/<%= @owner %>/env.sh ]; then
-    . /home/<%= @owner %>/env.sh
-<% end %>
-
 # Sets --app argument for CELERY_BIN
 CELERY_APP_ARG=""
 if [ ! -z "$CELERY_APP" ]; then
