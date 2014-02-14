@@ -17,16 +17,18 @@ class ssl {
 
   file { $bundle:
     source => "puppet:///modules/ssl/${bundle_filename}",
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+    notify => Service[nginx],
   }
 
   file { $key:
     source => "puppet:///modules/ssl/${key_filename}", # Must be placed on puppet master manually
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0600',
+    notify => Service[nginx],
   }
 
 }
