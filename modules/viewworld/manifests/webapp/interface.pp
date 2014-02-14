@@ -72,6 +72,7 @@ class viewworld::webapp::interface (
   } else {
     python::celery::instance { 'interface':
       django_settings => 'viewworld.settings',
+      app => 'viewworld.rest.tasks:app',
     }
   }
 

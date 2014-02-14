@@ -28,6 +28,10 @@ CELERYD_GROUP="<%= group %>"
 # and owned by the userid/group configured.
 CELERY_CREATE_DIRS=1
 
+<% if @django %>
+export DJANGO_SETTINGS_MODULE=<%= @django_settings %>
+<% end %>
+
 <% if @pyramid_config %>
 export PYRAMID_CONFIG=<%= @pyramid_config %>
 <% end %>
